@@ -282,12 +282,14 @@
                     priceSourceHTML = '<div class="price-source source-cardmarket">CardMarket Prices (€)</div>';
                     
                     const avgPrice = card.cardmarket.prices.averageSellPrice;
+                    const avg7 = card.cardmarket.prices.avg7;
                     const trendPrice = card.cardmarket.prices.trendPrice;
                     const lowPriceExPlus = card.cardmarket.prices.lowPriceExPlus;
                     const lowPriceFoil = card.cardmarket.prices.lowPriceFoil;
                     
                     priceHTML = `
                         <div><span class="price-label">Average Sell:</span> <span>${formatPrice(avgPrice, '€')}</span></div>
+                        <div><span class="price-label">Average 7 day:</span> <span>${formatPrice(avg7, '€')}</span></div>
                         <div><span class="price-label">Trend Price:</span> <span>${formatPrice(trendPrice, '€')}</span></div>
                         <div><span class="price-label">Low Price:</span> <span>${formatPrice(lowPriceExPlus, '€')}</span></div>
                         ${lowPriceFoil ? `<div><span class="price-label">Low Price (Foil):</span> <span>${formatPrice(lowPriceFoil, '€')}</span></div>` : ''}
