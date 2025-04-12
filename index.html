@@ -168,8 +168,14 @@
         // Pokemon TCG API endpoint
         const API_URL = 'https://api.pokemontcg.io/v2';
         
-        // Your API key goes here (get it from https://dev.pokemontcg.io/)
-        // NOTE: Replace this with your own API key
+        function convertUSDtoEUR(usdAmount) {
+        // Calculate the conversion
+        const exchangeRate = 0.92;
+        const eurAmount = usdAmount * exchangeRate;
+        
+        // Return rounded to 2 decimal places for currency
+        return Math.round(eurAmount * 100) / 100;
+        }
         
         
         // DOM elements
@@ -262,7 +268,7 @@
                 const hasCardMarketPrices = card.cardmarket && card.cardmarket.prices && 
                     (card.cardmarket.prices.averageSellPrice || 
                      card.cardmarket.prices.trendPrice || 
-                     card.cardmarket.prices.lowPrice);
+                     card.cardmarket.prices.lowPriceExPlus);
                 
                 // Check if TCGPlayer prices are available
                 const hasTcgPlayerPrices = card.tcgplayer && card.tcgplayer.prices && 
@@ -277,13 +283,13 @@
                     
                     const avgPrice = card.cardmarket.prices.averageSellPrice;
                     const trendPrice = card.cardmarket.prices.trendPrice;
-                    const lowPrice = card.cardmarket.prices.lowPrice;
+                    const lowPriceExPlus = card.cardmarket.prices.lowPriceExPlus;
                     const lowPriceFoil = card.cardmarket.prices.lowPriceFoil;
                     
                     priceHTML = `
                         <div><span class="price-label">Average Sell:</span> <span>${formatPrice(avgPrice, '€')}</span></div>
                         <div><span class="price-label">Trend Price:</span> <span>${formatPrice(trendPrice, '€')}</span></div>
-                        <div><span class="price-label">Low Price:</span> <span>${formatPrice(lowPrice, '€')}</span></div>
+                        <div><span class="price-label">Low Price:</span> <span>${formatPrice(lowPriceExPlus, '€')}</span></div>
                         ${lowPriceFoil ? `<div><span class="price-label">Low Price (Foil):</span> <span>${formatPrice(lowPriceFoil, '€')}</span></div>` : ''}
                     `;
                 } 
@@ -299,9 +305,9 @@
                         const prices = card.tcgplayer.prices[variant];
                         
                         priceHTML = `
-                            <div><span class="price-label">Market:</span> <span>${formatPrice(prices.market, '$')}</span></div>
-                            <div><span class="price-label">Mid:</span> <span>${formatPrice(prices.mid, '$')}</span></div>
-                            <div><span class="price-label">Low:</span> <span>${formatPrice(prices.low, '$')}</span></div>
+                            <div><span class="price-label">Market:</span> <span>${formatPrice(convertUSDtoEUR(prices.market), '€')}</span></div>
+                            <div><span class="price-label">Mid:</span> <span>${formatPrice(convertUSDtoEUR(prices.mid), '€')}</span></div>
+                            <div><span class="price-label">Low:</span> <span>${formatPrice(convertUSDtoEUR(prices.low), '€')}</span></div>
                             <div><span class="price-label">Variant:</span> <span>${capitalizeFirstLetter(variant)}</span></div>
                         `;
                     } else {
